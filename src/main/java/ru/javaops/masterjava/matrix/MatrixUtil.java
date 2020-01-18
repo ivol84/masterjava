@@ -25,19 +25,26 @@ public class MatrixUtil {
         }
         final int matrixARowCount = matrixA.length;
         final int matrixAColCount = matrixA[0].length;
+        final int matrixBRowCount = matrixB.length;
         final int matrixBColCount = matrixB[0].length;
 
-        int[][] C = new int[matrixARowCount][matrixBColCount];
+        int[][] matrixC = new int[matrixARowCount][matrixBColCount];
+        int[][] matrixBTransparent = new int[matrixBColCount][matrixBRowCount];
+        for (int row = 0; row < matrixBRowCount; row++) {
+            for (int col = 0; col < matrixBColCount; col++) {
+                matrixBTransparent[col][row] = matrixB[row][col];
+            }
+        }
         for (int aRow = 0; aRow < matrixARowCount; aRow++) {
             for (int bCol = 0; bCol < matrixBColCount; bCol++) {
                 int sum = 0;
                 for (int aCol = 0; aCol < matrixAColCount; aCol++) {
-                    sum += matrixA[aRow][aCol] * matrixB[aCol][bCol];
+                    sum += matrixA[aRow][aCol] * matrixBTransparent[bCol][aCol];
                 }
-                C[aRow][bCol] = sum;
+                matrixC[aRow][bCol] = sum;
             }
         }
-        return C;
+        return matrixC;
     }
 
     private static boolean isCompatible(int[][] a, int[][] b) {
@@ -54,6 +61,15 @@ public class MatrixUtil {
             }
         }
         return matrix;
+    }
+
+    public static void print(int[][] matrix) {
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                System.out.print(matrix[row][col] + " ");
+            }
+            System.out.println();
+        }
     }
 
     public static boolean compare(int[][] matrixA, int[][] matrixB) {
