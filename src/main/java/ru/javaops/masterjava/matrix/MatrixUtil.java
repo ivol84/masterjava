@@ -23,17 +23,20 @@ public class MatrixUtil {
         if (!isCompatible(matrixA, matrixB)) {
             throw new IllegalArgumentException();
         }
-        int[][] C = new int[matrixA.length][matrixB[0].length];
-        for (int aRow = 0; aRow < matrixA.length; aRow++) {
-            for (int bCol = 0; bCol < matrixB[0].length; bCol++) {
+        final int matrixARowCount = matrixA.length;
+        final int matrixAColCount = matrixA[0].length;
+        final int matrixBColCount = matrixB[0].length;
+
+        int[][] C = new int[matrixARowCount][matrixBColCount];
+        for (int aRow = 0; aRow < matrixARowCount; aRow++) {
+            for (int bCol = 0; bCol < matrixBColCount; bCol++) {
                 int sum = 0;
-                for (int aCol = 0; aCol < matrixA[0].length; aCol++) {
+                for (int aCol = 0; aCol < matrixAColCount; aCol++) {
                     sum += matrixA[aRow][aCol] * matrixB[aCol][bCol];
                 }
                 C[aRow][bCol] = sum;
             }
         }
-
         return C;
     }
 
