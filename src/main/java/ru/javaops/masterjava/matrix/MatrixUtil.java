@@ -20,19 +20,25 @@ public class MatrixUtil {
 
     // TODO optimize by https://habrahabr.ru/post/114797/
     public static int[][] singleThreadMultiply(int[][] matrixA, int[][] matrixB) {
-        final int matrixSize = matrixA.length;
-        final int[][] matrixC = new int[matrixSize][matrixSize];
-
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
+        if (!isCompatible(matrixA, matrixB)) {
+            throw new IllegalArgumentException();
+        }
+        int[][] C = new int[matrixA.length][matrixB[0].length];
+        for (int aRow = 0; aRow < matrixA.length; aRow++) {
+            for (int bCol = 0; bCol < matrixB[0].length; bCol++) {
                 int sum = 0;
-                for (int k = 0; k < matrixSize; k++) {
-                    sum += matrixA[i][k] * matrixB[k][j];
+                for (int aCol = 0; aCol < matrixA[0].length; aCol++) {
+                    sum += matrixA[aRow][aCol] * matrixB[aCol][bCol];
                 }
-                matrixC[i][j] = sum;
+                C[aRow][bCol] = sum;
             }
         }
-        return matrixC;
+
+        return C;
+    }
+
+    private static boolean isCompatible(int[][] a, int[][] b) {
+        return a[0].length == b.length;
     }
 
     public static int[][] create(int size) {
