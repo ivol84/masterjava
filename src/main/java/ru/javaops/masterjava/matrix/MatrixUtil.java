@@ -29,19 +29,19 @@ public class MatrixUtil {
         final int matrixBColCount = matrixB[0].length;
 
         int[][] matrixC = new int[matrixARowCount][matrixBColCount];
-        int[][] matrixBTransparent = new int[matrixBColCount][matrixBRowCount];
-        for (int row = 0; row < matrixBRowCount; row++) {
-            for (int col = 0; col < matrixBColCount; col++) {
-                matrixBTransparent[col][row] = matrixB[row][col];
+
+        int[] bRowAsColumn = new int[matrixBRowCount];
+        for (int matrixBColIndex = 0; matrixBColIndex < matrixBColCount; matrixBColIndex++) {
+            for (int matrixBRowIndex = 0; matrixBRowIndex < matrixBRowCount; matrixBRowIndex++) {
+                bRowAsColumn[matrixBRowIndex] = matrixB[matrixBRowIndex][matrixBColIndex];
             }
-        }
-        for (int aRow = 0; aRow < matrixARowCount; aRow++) {
-            for (int bCol = 0; bCol < matrixBColCount; bCol++) {
+            for (int aRowIndex = 0; aRowIndex < matrixARowCount; aRowIndex++) {
+                int[] aRow = matrixA[aRowIndex];
                 int sum = 0;
-                for (int aCol = 0; aCol < matrixAColCount; aCol++) {
-                    sum += matrixA[aRow][aCol] * matrixBTransparent[bCol][aCol];
+                for (int aColIndex = 0; aColIndex < matrixAColCount; aColIndex++) {
+                    sum += aRow[aColIndex] * bRowAsColumn[aColIndex];
                 }
-                matrixC[aRow][bCol] = sum;
+                matrixC[aRowIndex][matrixBColIndex] = sum;
             }
         }
         return matrixC;
@@ -63,11 +63,15 @@ public class MatrixUtil {
         return matrix;
     }
 
+    public static void print(int[] matrix) {
+        for (int col = 0; col < matrix.length; col++) {
+            System.out.print(matrix[col] + " ");
+        }
+    }
+
     public static void print(int[][] matrix) {
         for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                System.out.print(matrix[row][col] + " ");
-            }
+            print(matrix[row]);
             System.out.println();
         }
     }
