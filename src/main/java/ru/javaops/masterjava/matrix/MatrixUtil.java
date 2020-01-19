@@ -1,8 +1,10 @@
 package ru.javaops.masterjava.matrix;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.*;
 
 /**
  * gkislin
@@ -12,9 +14,76 @@ public class MatrixUtil {
 
     // TODO implement parallel multiplication matrixA*matrixB
     public static int[][] concurrentMultiply(int[][] matrixA, int[][] matrixB, ExecutorService executor) throws InterruptedException, ExecutionException {
-        final int matrixSize = matrixA.length;
-        final int[][] matrixC = new int[matrixSize][matrixSize];
+        if (!isCompatible(matrixA, matrixB)) {
+            throw new IllegalArgumentException();
+        }
 
+        final int matrixARowCount = matrixA.length;
+        final int matrixAColCount = matrixA[0].length;
+        final int matrixBRowCount = matrixB.length;
+        final int matrixBColCount = matrixB[0].length;
+
+        int[][] matrixC = new int[matrixARowCount][matrixBColCount];
+
+        int[] bRowAsColumn = new int[matrixBRowCount];
+        class ExecutionResult {
+            private int row;
+            private int column;
+            private int sum;
+
+            public ExecutionResult(int row, int column, int sum) {
+                this.row = row;
+                this.column = column;
+                this.sum = sum;
+            }
+
+            public int getRow() {
+                return row;
+            }
+
+            public int getColumn() {
+                return column;
+            }
+
+            public int getSum() {
+                return sum;
+            }
+
+            @Override
+            public String toString() {
+                return "ExecutionResult{" +
+                        "row=" + row +
+                        ", column=" + column +
+                        ", sum=" + sum +
+                        '}';
+            }
+        }
+        ExecutorCompletionService<List<ExecutionResult>> listExecutorCompletionService = new ExecutorCompletionService<>(executor);
+        List<Future<List<ExecutionResult>>> futures = new ArrayList();
+        for (int matrixBColIndex = 0; matrixBColIndex < matrixBColCount; matrixBColIndex++) {
+            for (int matrixBRowIndex = 0; matrixBRowIndex < matrixBRowCount; matrixBRowIndex++) {
+                bRowAsColumn[matrixBRowIndex] = matrixB[matrixBRowIndex][matrixBColIndex];
+            }
+            int finalMatrixBColIndex = matrixBColIndex;
+            int[] bRowAsColumnCopy = new int[matrixBRowCount];
+            System.arraycopy(bRowAsColumn, 0, bRowAsColumnCopy, 0, matrixBRowCount);
+            futures.add(listExecutorCompletionService.submit(() -> {
+                List<ExecutionResult> results = new ArrayList();
+                for (int aRowIndex = 0; aRowIndex < matrixARowCount; aRowIndex++) {
+                    int[] aRow = matrixA[aRowIndex];
+                    int sum = 0;
+                    for (int aColIndex = 0; aColIndex < matrixAColCount; aColIndex++) {
+                        sum += aRow[aColIndex] * bRowAsColumnCopy[aColIndex];
+                    }
+                    results.add(new ExecutionResult(aRowIndex, finalMatrixBColIndex, sum));
+                }
+                return results;
+            }));
+        }
+        for (int i=0; i<futures.size(); i++) {
+            List<ExecutionResult> executionResults = listExecutorCompletionService.take().get();
+            executionResults.stream().forEach(er -> matrixC[er.getRow()][er.getColumn()] = er.getSum());
+        }
         return matrixC;
     }
 
