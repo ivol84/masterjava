@@ -82,12 +82,12 @@
         <xs:all>
             <xs:element name="projectId" type="xs:IDREF"/>
             <xs:element name="name" type="xs:string"/>
-            <xs:element name="type" type="groupType"/>
+            <xs:element name="type" type="GroupStatusType"/>
         </xs:all>
         <xs:attribute type="xs:ID" name="id" use="required"/>
     </xs:complexType>
 
-    <xs:simpleType name="groupType">
+    <xs:simpleType name="GroupStatusType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="REGISTERING"/>
             <xs:enumeration value="CURRENT"/>
