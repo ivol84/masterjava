@@ -1,13 +1,9 @@
 
 package ru.javaops.masterjava.xml.schema;
 
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -42,6 +38,28 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
+ *         &lt;element name="Projects">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence maxOccurs="unbounded" minOccurs="0">
+ *                   &lt;element name="Project" type="{http://javaops.ru}ProjectType"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="Groups">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence maxOccurs="unbounded" minOccurs="0">
+ *                   &lt;element name="Group" type="{http://javaops.ru}GroupType"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
  *       &lt;/all>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -58,19 +76,23 @@ import javax.xml.bind.annotation.XmlType;
 public class Payload {
 
     @XmlElement(name = "Cities", namespace = "http://javaops.ru", required = true)
-    protected Payload.Cities cities;
+    protected Cities cities;
     @XmlElement(name = "Users", namespace = "http://javaops.ru", required = true)
-    protected Payload.Users users;
+    protected Users users;
+    @XmlElement(name = "Projects", namespace = "http://javaops.ru", required = true)
+    protected Projects projects;
+    @XmlElement(name = "Groups", namespace = "http://javaops.ru", required = true)
+    protected Groups groups;
 
     /**
      * Gets the value of the cities property.
      * 
      * @return
      *     possible object is
-     *     {@link Payload.Cities }
+     *     {@link Cities }
      *     
      */
-    public Payload.Cities getCities() {
+    public Cities getCities() {
         return cities;
     }
 
@@ -79,10 +101,10 @@ public class Payload {
      * 
      * @param value
      *     allowed object is
-     *     {@link Payload.Cities }
+     *     {@link Cities }
      *     
      */
-    public void setCities(Payload.Cities value) {
+    public void setCities(Cities value) {
         this.cities = value;
     }
 
@@ -91,10 +113,10 @@ public class Payload {
      * 
      * @return
      *     possible object is
-     *     {@link Payload.Users }
+     *     {@link Users }
      *     
      */
-    public Payload.Users getUsers() {
+    public Users getUsers() {
         return users;
     }
 
@@ -103,11 +125,59 @@ public class Payload {
      * 
      * @param value
      *     allowed object is
-     *     {@link Payload.Users }
+     *     {@link Users }
      *     
      */
-    public void setUsers(Payload.Users value) {
+    public void setUsers(Users value) {
         this.users = value;
+    }
+
+    /**
+     * Gets the value of the projects property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Projects }
+     *     
+     */
+    public Projects getProjects() {
+        return projects;
+    }
+
+    /**
+     * Sets the value of the projects property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Projects }
+     *     
+     */
+    public void setProjects(Projects value) {
+        this.projects = value;
+    }
+
+    /**
+     * Gets the value of the groups property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Groups }
+     *     
+     */
+    public Groups getGroups() {
+        return groups;
+    }
+
+    /**
+     * Sets the value of the groups property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Groups }
+     *     
+     */
+    public void setGroups(Groups value) {
+        this.groups = value;
     }
 
 
@@ -166,6 +236,126 @@ public class Payload {
                 city = new ArrayList<CityType>();
             }
             return this.city;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence maxOccurs="unbounded" minOccurs="0">
+     *         &lt;element name="Group" type="{http://javaops.ru}GroupType"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "group"
+    })
+    public static class Groups {
+
+        @XmlElement(name = "Group", namespace = "http://javaops.ru")
+        protected List<GroupType> group;
+
+        /**
+         * Gets the value of the group property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the group property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getGroup().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link GroupType }
+         * 
+         * 
+         */
+        public List<GroupType> getGroup() {
+            if (group == null) {
+                group = new ArrayList<GroupType>();
+            }
+            return this.group;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence maxOccurs="unbounded" minOccurs="0">
+     *         &lt;element name="Project" type="{http://javaops.ru}ProjectType"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "project"
+    })
+    public static class Projects {
+
+        @XmlElement(name = "Project", namespace = "http://javaops.ru")
+        protected List<ProjectType> project;
+
+        /**
+         * Gets the value of the project property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the project property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getProject().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link ProjectType }
+         * 
+         * 
+         */
+        public List<ProjectType> getProject() {
+            if (project == null) {
+                project = new ArrayList<ProjectType>();
+            }
+            return this.project;
         }
 
     }
